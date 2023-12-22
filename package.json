@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "react-hotkeys": "^2.0.0",
     "react-mathjax": "^1.0.1"
   }
 }
