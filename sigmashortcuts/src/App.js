@@ -279,7 +279,7 @@ function Expression({startingExpression = ''}) {
         ispmatrix = false;
         modes++;
       }
-      if (event.key === "{" && matrixMode == -1) {
+      if (event.key === "]" && matrixMode == -1) {
         currentExpression += '\\begin{pmatrix}'
         matrixMode = modes;
         ispmatrix = true;
@@ -578,7 +578,7 @@ function Expression({startingExpression = ''}) {
       if (event.key == "Tab" && matrixMode == modes - 1) {
         currentExpression += " \\\\ "
       }
-    }  
+    }
     
     for( var i = modes - 1; i >= 0; i--) {
       if(numerModes.includes(i)) {
@@ -604,9 +604,8 @@ function Expression({startingExpression = ''}) {
         matrixMode =  -1;
       }
     }
-    //TODO: Deleting, editing with the arrow keys, indicating where user is, creating a new expression with copyability. 
-
     setExpression(currentExpression);
+    //TODO: Deleting, editing with the arrow keys, indicating where user is, creating a new expression with copyability. 
   }, []);
 
   useEffect(() => {
@@ -617,7 +616,6 @@ function Expression({startingExpression = ''}) {
     };
   }, [handleKeyPress]);
 
-  //TODO: add way of visualizing shortcuts
   return (
     <MathJax.Provider>
     <div>
@@ -627,10 +625,57 @@ function Expression({startingExpression = ''}) {
   );
 }
 
+function Keyboard() {
+  const [keyboard, setKeyboard] = useState("nonesmall.png");
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.altKey && event.shiftKey) {
+        setKeyboard("altshiftsmall.png");
+      } else if (event.key === 'Alt') {
+        setKeyboard("altsmall.png");
+      } else if (event.key === 'Shift') {
+        setKeyboard("shiftsmall.png");
+      }
+    };
+
+    const handleKeyUp = (event) => {
+      if (keyboard === "altshiftsmall.png") {
+        if(event.key === "Alt") {
+          setKeyboard("shiftsmall.png")
+        } 
+        else if(event.key === "Shift") {
+          setKeyboard("altsmall.png")
+        }
+      } 
+      else {
+      if(event.key === "Shift" || event.key == "Alt")
+        setKeyboard("nonesmall.png");
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [keyboard]);
+
+  return (
+    <div>
+      <p>
+      </p>
+    <img src={keyboard} alt={keyboard} />
+  </div>
+  )
+}
+
 function App() {
 
   return (
     <div className="App"> 
+    <Keyboard />
     <Expression />
     </div>
   );
