@@ -7,808 +7,795 @@ function Expression({startingExpression = ''}) {
 
   const [expression, setExpression] = useState(startingExpression);
   var currentExpression = startingExpression;
-  var modes = 0;
-  var numerModes = [];
-  var matrixMode = -1;
-  var ispmatrix = false;
+  var matrix = false;
 
   
 
   const handleKeyPress = useCallback((event) => {
+    var midIndex = currentExpression.indexOf('\\mid')
+    var front = currentExpression.slice(0, midIndex + 4);
+    var back = currentExpression.slice(midIndex + 4, currentExpression.length);
     event.preventDefault()
     if (event.repeat) {
       return;
     }
-    currentExpression = currentExpression.slice(0, currentExpression.length - (3 * modes + numerModes.length * 6));
-    if(matrixMode >= 0) {
-      currentExpression = currentExpression.slice(0, currentExpression.length - 12)
-    }
 
     if (event.altKey) {
       if (event.key === "a") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\alpha \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\alpha \\mid'
       }
       if (event.key === "b") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\beta \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\beta \\mid'
       }
       if (event.key === "y") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\gamma \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\gamma \\mid'
       }
       if (event.key === "d") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\delta \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\delta \\mid'
       }
       if (event.key === "e") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\epsilon \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\epsilon \\mid'
       }
       if (event.key === "Z") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\zeta \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\zeta \\mid'
       }
       if (event.key === "n") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\eta \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\eta \\mid'
       }
       if (event.key === "q") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\theta \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\theta \\mid'
       }
       if (event.key === "I") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\iota \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\iota \\mid'
       }
       if (event.key === "k") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\kappa \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\kappa \\mid'
       }
       if (event.key === "l") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\lambda \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\lambda \\mid'
       }
       if (event.key === "m") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\mu \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\mu \\mid'
       }
       if (event.key === "&") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\nu \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\nu \\mid'
       }
       if (event.key === "j") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\xi \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\xi \\mid'
       }
       if (event.key === "g") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\pi \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\pi \\mid'
       }
       if (event.key === "p") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\rho \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\rho \\mid'
       }
       if (event.key === "s") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\sigma \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\sigma \\mid'
       }
       if (event.key === "t") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\tau \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\tau \\mid'
       }
       if (event.key === "u") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\upsilon \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\upsilon \\mid'
       }
       if (event.key === "f") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\phi \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\phi \\mid'
       }
       if (event.key === "x") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\chi \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\chi \\mid'
       }
       if (event.key === "5") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\psi \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\psi \\mid'
       }
       if (event.key === "o") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\omega \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\omega \\mid'
       }
       if (event.key === "Y") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Gamma \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Gamma \\mid'
       }
       if (event.key === "D") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Delta \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Delta \\mid'
       }
       if (event.key === "Q") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Theta \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Theta \\mid'
       }
       if (event.key === "L") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Lambda \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Lambda \\mid'
       }
       if (event.key === "J") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Xi \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Xi \\mid'
       }
       if (event.key === "S") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Sigma \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Sigma \\mid'
       }
       if (event.key === "U") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Upsilon \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Upsilon \\mid'
       }
       if (event.key === "F") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Phi \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Phi \\mid'
       }
       if (event.key === "%") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Psi \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Psi \\mid'
       }
       if (event.key === "O") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\Omega \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\Omega \\mid'
       }
       if (event.key === ",") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\leq \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\leq \\mid'
       }
       if (event.key === ".") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\geq \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\geq \\mid'
       }
       if (event.key === "=") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\neq \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\neq \\mid'
       }
       if (event.key === "9") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\subset \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\subset \\mid'
       }
       if (event.key === "0") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\supset \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\supset \\mid'
       }
       if (event.key === "+") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\equiv \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\equiv \\mid'
       }
       if (event.key === "1") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\in \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\in \\mid'
       }
       if (event.key === "!") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\notin \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\notin \\mid'
       }
       if (event.key === "(") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\subseteq \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\subseteq \\mid'
       }
       if (event.key === ")") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\supseteq \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\supseteq \\mid'
       }
       if (event.key === "h") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\parallel \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\parallel \\mid'
       }
       if (event.key === "H") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\perp \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\perp \\mid'
       }
       if (event.key === "`") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\approx \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\approx \\mid'
       }
       if (event.key === "-") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\pm \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\pm \\mid'
       }
       if (event.key === "R") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\cdot \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\cdot \\mid'
       }
       if (event.key === "\\") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\div \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\div \\mid'
       }
       if (event.key === "X") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\times \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\times \\mid'
       }
       if (event.key === "c") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\cup \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\cup \\mid'
       }
       if (event.key === "2") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\cap \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\cap \\mid'
       }
       if (event.key === "v") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\vee \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\vee \\mid'
       }
       if (event.key === "4") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\wedge \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\wedge \\mid'
       }
       if (event.key === "C") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\bigcup \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\bigcup \\mid'
       }
       if (event.key === "@") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\bigcap \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\bigcap \\mid'
       }
       if (event.key === "i") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\int \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\int \\mid'
       }
       if (event.key === "G") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\prod \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\prod \\mid'
       }
       if (event.key === "V") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\bigvee \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\bigvee \\mid'
       }
       if (event.key === "$") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\bigwedge \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\bigwedge \\mid'
       }
       if (event.key === "<") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\gets \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\gets \\mid'
       }
       if (event.key === ">") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\to \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\to \\mid'
       }
       if (event.key === "?") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\leftrightarrow \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\leftrightarrow \\mid'
       }
       if (event.key === "w") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\uparrow \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\uparrow \\mid'
       }
       if (event.key === "W") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\downarrow \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\downarrow \\mid'
       }
       if (event.key === "B") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\cdots \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\cdots \\mid'
       }
       if (event.key === "M") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\vdots \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\vdots \\mid'
       }
       if (event.key === "N") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\ddots \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\ddots \\mid'
       }
       if (event.key === "A") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\forall \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\forall \\mid'
       }
       if (event.key === "E") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\exists \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\exists \\mid'
       }
       if (event.key === "6") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\partial \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\partial \\mid'
       }
       if (event.key === "8") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\infty \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\infty \\mid'
       }
       if (event.key === ";") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\emptyset \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\emptyset \\mid'
       }
       if (event.key === ":") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\neg \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\neg \\mid'
       }
       if (event.key === "^") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\hat{ \\mid '
-        modes++;
+        front = front.slice(0, front.length - 5);
+        front += ' \\hat{ \\mid } '
       }
       if (event.key === "_") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\bar{ \\mid '
-        modes++;
+        front = front.slice(0, front.length - 5);
+        front += ' \\bar{ \\mid } '
       }
       if (event.key === "#") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\vec{ \\mid '
-        modes++;
+        front = front.slice(0, front.length - 5);
+        front += ' \\vec{ \\mid } '
       }
       if (event.key === "*") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\dot{ \\mid '
-        modes++;
+        front = front.slice(0, front.length - 5);
+        front += ' \\dot{ \\mid } '
       }
       if (event.key === "~") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\tilde{ \\mid '
-        modes++;
+        front = front.slice(0, front.length - 5);
+        front += ' \\tilde{ \\mid } '
       }
       if (event.key === "7") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\sqrt{ \\mid '
-        modes++;
+        front = front.slice(0, front.length - 5);
+        front += ' \\sqrt{ \\mid } '
       }
       if (event.key === "/") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\frac{ \\mid ';
-        numerModes.push(modes);
-        modes++;
+        front = front.slice(0, front.length - 5);
+        front += ' \\frac{ \\mid }{  } ';
       }
-      if (event.key === "[" && matrixMode === -1) {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += '\\begin{bmatrix} \\mid '
-        matrixMode = modes;
-        ispmatrix = false;
-        modes++;
+      if (event.key === "[" && !matrix) {
+        front = front.slice(0, front.length - 5);
+        front += ' \\begin{bmatrix} \\mid \\end{bmatrix} '
+        matrix = true;
       }
-      if (event.key === "]" && matrixMode === -1) {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += '\\begin{pmatrix} \\mid '
-        matrixMode = modes;
-        ispmatrix = true;
-        modes++;
+      if (event.key === "]" && !matrix) {
+        front = front.slice(0, front.length - 5);
+        front += ' \\begin{pmatrix} \\mid \\end{pmatrix} '
+        matrix = true;
       }
 
 
     } else {
       if (event.key === "a") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' a \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' a \\mid'
       }
       if (event.key === "b") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' b \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' b \\mid'
       }
       if (event.key === "y") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' y \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' y \\mid'
       }
       if (event.key === "d") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' d \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' d \\mid'
       }
       if (event.key === "e") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' e \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' e \\mid'
       }
       if (event.key === "Z") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' z \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' z \\mid'
       }
       if (event.key === "n") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' n \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' n \\mid'
       }
       if (event.key === "q") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' q \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' q \\mid'
       }
       if (event.key === "I") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' I \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' I \\mid'
       }
       if (event.key === "k") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' k \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' k \\mid'
       }
       if (event.key === "l") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' l \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' l \\mid'
       }
       if (event.key === "m") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' m \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' m \\mid'
       }
       if (event.key === "&") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' & \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' & \\mid'
       }
       if (event.key === "j") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' j \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' j \\mid'
       }
       if (event.key === "g") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' g \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' g \\mid'
       }
       if (event.key === "p") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' p \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' p \\mid'
       }
       if (event.key === "s") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' s \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' s \\mid'
       }
       if (event.key === "t") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' t \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' t \\mid'
       }
       if (event.key === "u") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' u \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' u \\mid'
       }
       if (event.key === "f") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' f \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' f \\mid'
       }
       if (event.key === "x") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' x \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' x \\mid'
       }
       if (event.key === "5") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 5 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 5 \\mid'
       }
       if (event.key === "o") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' o \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' o \\mid'
       }
       if (event.key === "Y") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' Y \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' Y \\mid'
       }
       if (event.key === "D") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' D \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' D \\mid'
       }
       if (event.key === "Q") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' Q \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' Q \\mid'
       }
       if (event.key === "L") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' L \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' L \\mid'
       }
       if (event.key === "J") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' J \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' J \\mid'
       }
       if (event.key === "S") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' S \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' S \\mid'
       }
       if (event.key === "U") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' U \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' U \\mid'
       }
       if (event.key === "F") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' F \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' F \\mid'
       }
       if (event.key === "%") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' % \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\% \\mid'
       }
       if (event.key === "O") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' O \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' O \\mid'
       }
       if (event.key === ",") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' , \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' , \\mid'
       }
       if (event.key === ".") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' . \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' . \\mid'
       }
       if (event.key === "=") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' = \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' = \\mid'
       }
       if (event.key === "9") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 9 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 9 \\mid'
       }
       if (event.key === "0") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 0 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 0 \\mid'
       }
       if (event.key === "+") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' + \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' + \\mid'
       }
       if (event.key === "1") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 1 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 1 \\mid'
       }
       if (event.key === "!") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' ! \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ! \\mid'
       }
       if (event.key === "(") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' ( \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ( \\mid'
       }
       if (event.key === ")") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' ) \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ) \\mid'
       }
       if (event.key === "h") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' h \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' h \\mid'
       }
       if (event.key === "H") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' H \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' H \\mid'
       }
       if (event.key === "`") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' ` \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ` \\mid'
       }
       if (event.key === "-") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' - \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' - \\mid'
       }
       if (event.key === "R") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' R \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' R \\mid'
       }
       if (event.key === "\\") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\ \\mid'
       }
       if (event.key === "X") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' X \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' X \\mid'
       }
       if (event.key === "c") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' c \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' c \\mid'
       }
       if (event.key === "2") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 2 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 2 \\mid'
       }
       if (event.key === "v") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' v \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' v \\mid'
       }
       if (event.key === "4") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 4 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 4 \\mid'
       }
       if (event.key === "C") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' C \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' C \\mid'
       }
       if (event.key === "@") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' @ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' @ \\mid'
       }
       if (event.key === "i") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' i \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' i \\mid'
       }
       if (event.key === "G") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' G \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' G \\mid'
       }
       if (event.key === "V") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' V \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' V \\mid'
       }
       if (event.key === "$") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' $ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' $ \\mid'
       }
       if (event.key === "<") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' < \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' < \\mid'
       }
       if (event.key === ">") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' > \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' > \\mid'
       }
       if (event.key === "?") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' ? \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ? \\mid'
       }
       if (event.key === "w") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' w \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' w \\mid'
       }
       if (event.key === "W") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' W \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' W \\mid'
       }
       if (event.key === "B") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' B \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' B \\mid'
       }
       if (event.key === "M") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' M \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' M \\mid'
       }
       if (event.key === "N") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' N \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' N \\mid'
       }
       if (event.key === "A") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' A \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' A \\mid'
       }
       if (event.key === "E") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' E \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' E \\mid'
       }
       if (event.key === "6") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 6 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 6 \\mid'
       }
       if (event.key === "8") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 8 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 8 \\mid'
       }
       if (event.key === ";") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' ; \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ; \\mid'
       }
       if (event.key === ":") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' : \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' : \\mid'
       }
       if (event.key === "~") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' ~ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ~ \\mid'
       }
       if (event.key === "3") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 3 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 3 \\mid'
       }
       if (event.key === "#") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' # \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\# \\mid'
       }
       if (event.key === "^") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        modes++;
-        currentExpression += ' ^{ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ^{ \\mid } '
       }
       if (event.key === "7") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' 7 \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' 7 \\mid'
       }
       if (event.key === "*") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' * \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' * \\mid'
       }
       if (event.key === "_") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        modes++;
-        currentExpression += ' _{ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' _{ \\mid } '  
       }
       if (event.key === "r") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' r \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' r \\mid'
       }
       if (event.key === "T") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' T \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' T \\mid'
       }
       if (event.key === "{") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\{ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\{ \\mid'
       }
       if (event.key === "}") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\} \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\} \\mid'
       }
       if (event.key === "[") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' [ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' [ \\mid'
       }
       if (event.key === "]") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' ] \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' ] \\mid'
       }
       if (event.key === "|") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' | \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' | \\mid'
       }
       if (event.key === "\\") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \\ \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \\ \\mid'
       }
       if (event.key === "K") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' K \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' K \\mid'
       }
       if (event.key === "'") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' \' \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' \' \\mid'
       }
       if (event.key === "\"") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' " \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' " \\mid'
       }
       if (event.key === "z") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' z \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' z \\mid'
       }
       if (event.key === "/") {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += ' / \\mid '
+        front = front.slice(0, front.length - 5);
+        front += ' / \\mid'
       }
-      if(event.key === " " && matrixMode === modes - 1) {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += " & \\mid "
+      if(event.key === " " && matrix) {
+        front = front.slice(0, front.length - 5);
+        front += " & \\mid"
       }
-      if (event.key === "Tab" && matrixMode === modes - 1) {
-        currentExpression = currentExpression.slice(0, currentExpression.length - 6);
-        currentExpression += " \\\\ \\mid "
+      if (event.key === "Tab" && matrix) {
+        front = front.slice(0, front.length - 5);
+        front += " \\\\ \\mid"
+      }
+    }
+    if(event.key == "Enter") {
+      front = front.slice(0, front.length - 5);
+      var firstBracket = back.indexOf("}");
+      var skipBy = 2;
+      if (back[firstBracket + 1] === "{") {
+        skipBy = 3
+      }
+      back = back.slice(0, firstBracket + skipBy) + "\\mid" + back.slice(firstBracket + skipBy, back.length);
+    }
+
+    if(event.key == "Backspace") {
+      front = front.slice(0, front.length - 5);
+      var resversedFront = reverseString(front);
+      var reversedDeleteTo = resversedFront.indexOf(" ");
+      var deleteTo = front.length - reversedDeleteTo;
+      var SegmentToDelete = front.slice(deleteTo, front.length);
+      if(SegmentToDelete.indexOf("{") != -1) {
+        if(back.indexOf("}{") == 1) {
+          back = back.slice(back.indexOf("}{") + 2, back.length);
+        }
+        back = back.slice(back.indexOf("}") + 1, back.length);
+      }
+      front = front.slice(0, deleteTo) + "\\mid";
+      if(SegmentToDelete.indexOf("}{") != -1) {
+        front += " }{  } "
+      } else if(SegmentToDelete.indexOf("matrix") != -1) {
+        back = back.slice(back.indexOf("matrix") + 8, back.length)
+        matrix = false;
+      } 
+      else if(SegmentToDelete.indexOf("}") != -1) {
+        front += " } ";
       }
     }
 
-    if(event.key === "Enter") {
-      currentExpression = currentExpression.slice(0, currentExpression.length - 6);
+    if(event.key === "ArrowLeft") {
+      front = front.slice(0, front.length - 5);
+      var resversedFront = reverseString(front);
+      var reversedMoveTo = resversedFront.indexOf(" ");
+      var moveTo = front.length - reversedMoveTo;
+      front = front.slice(0, moveTo) + "\\mid" + front.slice(moveTo, front.length);
     }
-    
-    var placeMid = false;
-
-    for( var i = modes - 1; i >= 0; i--) {
-      placeMid = false;
-      if(currentExpression.indexOf("\\mid ") === -1 && i === modes - 1) {
-        placeMid = true;
-      }
-      if(numerModes.includes(i)) {
-        currentExpression += ' }  { '
-        if(placeMid) {
-          currentExpression += "\\mid "
-        }
-        currentExpression += " } "
-      } else if (i === matrixMode) {
-        if (ispmatrix) {
-          currentExpression += ' \\end{pmatrix} ' 
-        } else {
-          currentExpression += ' \\end{bmatrix} ' 
-        }
-        if(placeMid) {
-          currentExpression += "\\mid "
-        }
-      } else {
-        currentExpression += ' } '
-        if(placeMid) {
-          currentExpression += "\\mid "
-        }
-      }
-    }
-
-    if (event.key === "Enter") {
-      modes--;
-      if(numerModes.includes(modes)) {
-        numerModes.pop(numerModes.indexOf(modes));
-        modes++;
-      }
-      if(modes === matrixMode) {
-        matrixMode =  -1;
-      }
-    }
+    currentExpression = front + back;
+    //alert("hey" + currentExpression + "hey");
     setExpression(currentExpression);
     //TODO: Deleting, editing, moving where user is, creating a new expression with copyability. 
   }, []);
+
+     
+function reverseString(str){ 
+  const reversedString =  
+  str.split("").reduce((acc, char) => char + acc, ""); 
+  return reversedString; 
+} 
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
